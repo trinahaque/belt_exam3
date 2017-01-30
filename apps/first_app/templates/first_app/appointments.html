@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Appointments</title>
+  </head>
+  <body>
+    <a href="/success">Dashboard</a><br>
+    <a href="/logout">Logout</a><br><br>
+
+    <form action='/update/{{request.session.appointment_id}}' method='POST'>
+       {% csrf_token %}
+       Tasks: <input type="text" name='task'><br>
+       Status:
+       <select name='status'>
+          <option value="done">Done</option>
+          <option value="pending">Pending</option>
+          <option value="missed">Missed</option>
+      </select><br>
+       Date: <input type="date" name='date'><br>
+       Time: <input type="time" name='time'><br><br>
+        <input type="submit" value='Update'><br><br>
+    </form>
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags}}" {% endif %}>{{ message }}
+    </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+  </body>
+</html>

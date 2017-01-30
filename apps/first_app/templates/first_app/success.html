@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>Hello, {{ request.session.first_name }}!!</p>
+    <form action='/logout' method='POST'>
+      {% csrf_token %}
+       <input type="submit" value='Log Out'>
+     </form>
+
+     <h2>Here are your appointments for today, {{ request.session.today}}</h2>
+
+     <p> Task    Status  Date     Time </p>
+    {% for appointment in today %}
+      {% if appointment.status == "done" %}
+        <p> {{ appointment.task }} {{ appointment.status }} {{ appointment.date }} {{ appointment.time }}</p>
+      {% else %}
+        <p> {{ appointment.task }} {{ appointment.status }} {{ appointment.date }} {{ appointment.time }} <a href="/appointments">Edit</a> <a href="/delete/{{request.session.id}}/{{appointment.id}}">Delete</a></p>
+      {% endif %}
+    {% endfor %}
+
+     <h2> Your Other Appointments </h2>
+     <p> Task    Date     Time </p>
+    {% for appointment in appointments %}
+      <p> {{ appointment.task }} {{ appointment.date }} {{ appointment.time }}</p>
+    {% endfor %}
+
+     <form action='/add_appointment/{{ request.session.id }}' method='POST'>
+      {% csrf_token %}
+      <h3>Add Appointment</h3>
+      Date: <input type="date" name='date'><br>
+      Time: <input type="time" name='time'><br>
+      Tasks: <input type="text" name='task'><br><br>
+       <input type="submit" value='Add'><br><br>
+     </form>
+
+     {% if messages %}
+     <ul class="messages">
+       {% for message in messages %}
+       <li{% if message.tags %} class="{{ message.tags}}" {% endif %}>{{ message }}
+     </li>
+       {% endfor %}
+     </ul>
+     {% endif %}
+  </body>
+</html>
